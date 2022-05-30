@@ -19,12 +19,10 @@ const Container = styled.div`
 
 interface PropsFromState {
   data: TodoList[];
-  isModalOpen: boolean;
 }
 
 interface propsFromDispatch {
   fetchRequest: () => any;
-  openModal: (isModalOpen: boolean) => any;
 }
 
 type AllProps = PropsFromState & propsFromDispatch;
@@ -56,27 +54,18 @@ const columns = [
 }];
 
 
-const HomePage: React.FC<AllProps> = ({
+const TodoListComponent: React.FC<AllProps> = ({
   data,
-  isModalOpen,
-  fetchRequest,
-  openModal
+  fetchRequest
 }) => {
-  function setIsOpen() {
-    openModal(true);
-  }
-
+  
   useEffect(() => {
    fetchRequest();
   }, []);
 
   return (
     <Container>
-        <div>
-          <a href="#" onClick={setIsOpen}>Add Todo</a>
-        </div>
-        <br/>
-        <Modal isModalOpen={isModalOpen}/>
+        <Modal isModalOpen={false}/>
         <Table data={data} columns={columns}/>
     </Container>
   );
@@ -93,11 +82,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
     fetchRequest: () => {
       dispatch(fetchRequest);
-    },
-    openModal: (isModalOpen: boolean) => {
-      dispatch(openModal(isModalOpen));
     }
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoListComponent);
